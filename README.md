@@ -21,7 +21,7 @@ This project was made to be the main place for people looking for god rolls and 
 ## How to Contribute Items
 
 1. **Decode your item serial** using any save editor of choice (reccomend https://www.nexusmods.com/borderlands4/mods/210).  
-2. **Add JSON ** with the important fields to the `items/` folder.  
+2. **Add JSON** with the important fields to the `items/` folder.  
 3. **Create a Pull Request** with your addition * or dm me.  
 4. Make sure to include **note** for your item if needed.  
 
