@@ -4,7 +4,7 @@
 
 OrdoniteDB is a community database for **perfect** Borderlands 4 items and community builds.
 This project was made to be the main place for people looking for god rolls and builds to go.
-**Items and builds must not be impossible to get in vanilla.**
+**Items and builds must be possible to get in vanilla.**
 
 
 ---
