@@ -31,12 +31,12 @@ This project was made to be the main place for people looking for god rolls and 
 {
   "serial": "@CgxFw!2}TYg...",
   "decoded-id": "{100} {1} {4} {8} {17}..."
-  "name": "Mantra",
-  "type": "Shotgun",
+  "name": "mantra",
+  "type": "shotgun",
   "rarity": 5,
-  "manufacturer": "Hyperion",
+  "manufacturer": "hyperion",
   "level": 60,
-  "parts": "COV"
+  "parts": "cov"
   "uploader": "Your name"
 }
 ```
