@@ -1,11 +1,11 @@
 {
   "serial": "@UgbV{rFnkbUxPH)BRG}7?s74(sEb1Jp9V#7a9cm0}4{8-E6>1jh7iuH/",
-  "decoded id": "3, 0, 1, 60| 2, 4012|| {81} {2} {5} {4} {6} {3} {80} {51} {54} {52} {53} {17} {29} {37} {36} {41} {47} {65}|"
+  "decoded id": "3, 0, 1, 60| 2, 4012|| {81} {2} {5} {4} {6} {3} {80} {51} {54} {52} {53} {17} {29} {37} {36} {41} {47} {65}|",
   "name": "seventh sense",
   "type": "pistol",
   "rarity": 5,
   "manufacturer": "jakobs",
   "level": 60,
-  "underbarrel": "ammo switcher"
+  "underbarrel": "ammo switcher",
   "uploader": "owner"
 }
