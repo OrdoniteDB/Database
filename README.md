@@ -26,6 +26,8 @@ This project was made to be the main place for people looking for god rolls and 
 3. **Create a Pull Request** with your addition * or dm me.  
 4. Make sure to include **note** for your item if needed.  
 
+**no capalization at all (exept serial)**
+
 > Example snippet:
 ```json
 {
