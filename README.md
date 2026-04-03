@@ -32,7 +32,7 @@ This project was made to be the main place for people looking for god rolls and 
   "serial": "@CgxFw!2}TYg...",
   "decoded-id": "{100} {1} {4} {8} {17}..."
   "name": "Mantra",
-  "type": "Gun",
+  "type": "Shotgun",
   "rarity": 5,
   "manufacturer": "Hyperion",
   "level": 60,
