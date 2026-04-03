@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,115 +8,170 @@
   body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(to bottom right, rgba(115, 25, 249, 0.3), rgba(255,255,255,0.3));
-    backdrop-filter: blur(8px);
+    background: linear-gradient(180deg, #1a001a 0%, #4b004b 100%);
+    color: #fff;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
   h1 {
+    text-align: center;
     margin: 20px 0;
-    color: #fff;
-    text-shadow: 0 0 8px rgba(0,0,0,0.5);
+    font-size: 2rem;
+    text-shadow: 0 0 8px rgba(0,0,0,0.7);
   }
 
-  .item-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-    width: 90%;
+  .container {
+    display: flex;
+    flex-direction: row;
     max-width: 1200px;
-    margin-bottom: 40px;
+    margin: 0 auto;
   }
 
-  .item-card {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 15px;
+  .item-list {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 80vh;
+    border-right: 1px solid rgba(255,255,255,0.2);
+    padding: 10px;
+  }
+
+  .item-list button {
+    display: block;
+    width: 100%;
+    background: rgba(0,0,0,0.5);
     color: #fff;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: transform 0.2s;
+    border: none;
+    padding: 10px;
+    margin-bottom: 5px;
+    text-align: left;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
   }
 
-  .item-card:hover {
-    transform: translateY(-5px);
+  .item-list button:hover {
+    background: rgba(255,255,255,0.1);
   }
 
-  .item-card h2 {
-    margin: 0 0 10px 0;
-    font-size: 1.2rem;
+  .item-list button.active {
+    background: rgba(255,255,255,0.2);
   }
 
-  .item-card p {
-    margin: 4px 0;
-    font-size: 0.9rem;
+  .item-detail {
+    flex: 2;
+    padding: 20px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 12px;
+    margin-left: 10px;
+    min-height: 80vh;
+    backdrop-filter: blur(6px);
   }
 
-  .rarity-1 { color: #aaa; }
-  .rarity-2 { color: #0ff; }
-  .rarity-3 { color: #0f0; }
-  .rarity-4 { color: #f0f; }
-  .rarity-5 { color: #ff0; }
+  .item-detail h2 {
+    margin-top: 0;
+    color: #f0f;
+  }
 
+  .item-detail p {
+    margin: 5px 0;
+  }
+
+  .label {
+    font-weight: bold;
+    color: #ddd;
+  }
 </style>
 </head>
 <body>
 
 <h1>BL4 Items Database</h1>
-<div class="item-container" id="itemContainer"></div>
+
+<div class="container">
+  <div class="item-list" id="itemList"></div>
+  <div class="item-detail" id="itemDetail">
+    <h2>Select an item to view details</h2>
+  </div>
+</div>
 
 <script>
-  const owner = 'OrdoniteDB'; // Replace with your GitHub username
-  const repo = 'Database';     // Replace with your repository name
-  const path = 'items';        // Folder path in repo
-
-  async function loadItems() {
-    const container = document.getElementById('itemContainer');
-
-    try {
-      // 1. Get list of all files in /items folder via GitHub API
-      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
-      const files = await res.json();
-
-      // 2. Filter for JSON files only
-      const jsonFiles = files.filter(f => f.name.endsWith('.json'));
-
-      // 3. Fetch each JSON file and display
-      for (const file of jsonFiles) {
-        const dataRes = await fetch(file.download_url);
-        const data = await dataRes.json();
-        const items = Array.isArray(data) ? data : [data];
-
-        items.forEach(item => {
-          const card = document.createElement('div');
-          card.classList.add('item-card', `rarity-${item.rarity}`);
-
-          card.innerHTML = `
-            <h2>${item.name} (${item.type})</h2>
-            <p><strong>Serial:</strong> ${item.serial}</p>
-            <p><strong>Decoded ID:</strong> ${item['decoded-id'] || item['decoded id']}</p>
-            <p><strong>Manufacturer:</strong> ${item.manufacturer}</p>
-            <p><strong>Level:</strong> ${item.level}</p>
-            <p><strong>Underbarrel:</strong> ${item.underbarrel}</p>
-            ${item.magazine ? `<p><strong>Magazine:</strong> ${item.magazine}</p>` : ''}
-            <p><strong>Uploader:</strong> ${item.uploader}</p>
-          `;
-
-          container.appendChild(card);
-        });
-      }
-
-    } catch (err) {
-      console.error('Error loading items:', err);
-      container.innerHTML = '<p style="color:white;">Failed to load items.</p>';
-    }
+const items = [
+  {
+    "name": "Dullahan",
+    "type": "Shotgun",
+    "rarity": 4,
+    "manufacturer": "Jakobs",
+    "level": 60,
+    "underbarrel": "Spread Launcher",
+    "serial": "@Ugd_t@FnkbUDm~C$RG/{psJf_osD7w@s87X3-9eQ?okGPz<w5",
+    "decoded": "9, 0, 1, 60 | 2, 1861 || {91} {2} {4} {6} {90} {59} {62} {61} {15} {88} {27} {34} {35} {40} {44}",
+    "uploader": "owner"
+  },
+  {
+    "name": "Balor",
+    "type": "Shotgun",
+    "rarity": 4,
+    "manufacturer": "Jakobs",
+    "level": 60,
+    "underbarrel": "None",
+    "serial": "@Ugd_t@FnkbUq#RIbRG/{ps6/DpA8H@!9;z=Y4k{074=NTaCE{Uhd;t",
+    "decoded": "9, 0, 1, 60 | 2, 802 || {98} {2} {4} {6} {5} {8} {62} {61} {59} {94} {24} {28} {29} {40} {68} | c, 94",
+    "uploader": "owner"
+  },
+  {
+    "name": "Shalashaska",
+    "type": "Pistol",
+    "rarity": 5,
+    "manufacturer": "Jakobs",
+    "level": 60,
+    "underbarrel": "Ammo Switcher",
+    "magazine": "Torgue Impact",
+    "serial": "@UgbV{rFnkbUC/%H5RG}7?sIsVYsC1}ys85wa-9eQ?okG<@{X&gI00",
+    "decoded": "3, 0, 1, 60 | 2, 2884 || {83} {2} {5} {4} {82} {51} {52} {54} {15} {18} {27} {34} {35} {42} {47} {65}",
+    "uploader": "owner"
   }
+];
 
-  loadItems();
+// Populate list
+const itemList = document.getElementById('itemList');
+const itemDetail = document.getElementById('itemDetail');
+
+items.forEach((item, index) => {
+  const btn = document.createElement('button');
+  btn.textContent = `${item.manufacturer} ${item.type} (${item.name}) - Level ${item.level}`;
+  btn.onclick = () => selectItem(index);
+  btn.id = 'itemBtn' + index;
+  itemList.appendChild(btn);
+});
+
+function selectItem(index) {
+  const item = items[index];
+  
+  // Update detail panel
+  let html = `<h2>${item.manufacturer} ${item.type} (${item.name})</h2>`;
+  html += `<p><span class="label">Serial:</span> ${item.serial}</p>`;
+  html += `<p><span class="label">Decoded:</span> ${item.decoded}</p>`;
+  html += `<p><span class="label">Level:</span> ${item.level}</p>`;
+  html += `<p><span class="label">Manufacturer:</span> ${item.manufacturer}</p>`;
+  html += `<p><span class="label">Underbarrel:</span> ${item.underbarrel || 'None'}</p>`;
+  if(item.magazine) html += `<p><span class="label">Magazine:</span> ${item.magazine}</p>`;
+  html += `<p><span class="label">Uploader:</span> ${item.uploader}</p>`;
+  itemDetail.innerHTML = html;
+
+  // Update URL hash
+  window.location.hash = index;
+
+  // Update active button
+  document.querySelectorAll('.item-list button').forEach((b, i) => {
+    b.classList.toggle('active', i === index);
+  });
+}
+
+// Load item from URL hash
+const hashIndex = parseInt(window.location.hash.replace('#',''));
+if(!isNaN(hashIndex) && items[hashIndex]) {
+  selectItem(hashIndex);
+}
 </script>
+
 </body>
 </html>
-
