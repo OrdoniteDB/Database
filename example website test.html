@@ -3,373 +3,778 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BL4 Items Database</title>
+  <title>VaultDB – BL4 Items Database</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow:ital,wght@0,300;0,400;0,600;0,800;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
+    :root {
+      --bg-deep:     #06030f;
+      --bg-mid:      #0c0720;
+      --bg-glass:    rgba(14, 8, 32, 0.7);
+      --bg-card:     rgba(20, 10, 46, 0.55);
+      --border:      rgba(160, 80, 255, 0.18);
+      --border-hi:   rgba(180, 110, 255, 0.45);
+      --accent:      #b06aff;
+      --accent-lo:   #7c3aed;
+      --accent-glow: rgba(160, 80, 255, 0.35);
+      --text-hi:     #f2ecff;
+      --text-mid:    #bdb2d8;
+      --text-lo:     #7a6ea0;
+      --mono:        'Space Mono', monospace;
+      --sans:        'Barlow', sans-serif;
+      --display:     'Barlow Condensed', sans-serif;
+      --gold:        #ffcd6b;
+      --gold-glow:   rgba(255, 180, 50, 0.35);
     }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #0a000a 0%, #2a0a2a 50%, #4a0a4a 100%);
-      color: #fff;
+      font-family: var(--sans);
+      background-color: var(--bg-deep);
+      color: var(--text-hi);
       min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
     }
 
-    h1 {
-      text-align: center;
-      margin: 20px 0 10px;
-      font-size: 2rem;
-      text-shadow: 0 0 8px rgba(0,0,0,0.7);
+    /* ── Atmospheric background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, rgba(112, 36, 215, 0.22) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(80, 20, 160, 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 30% at 55% 50%, rgba(90, 30, 180, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .search-box {
-      text-align: center;
-      margin: 20px auto;
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .search-box input {
-      width: 80%;
-      max-width: 400px;
-      padding: 10px 15px;
-      border-radius: 30px;
-      border: none;
-      background: rgba(255,255,255,0.2);
-      color: white;
-      font-size: 1rem;
-      backdrop-filter: blur(4px);
+    .shell {
+      position: relative;
+      z-index: 1;
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
     }
 
-    .search-box input::placeholder {
-      color: #ddd;
-    }
-
-    .container {
+    /* ── TOPBAR ── */
+    .topbar {
       display: flex;
-      flex-direction: row;
-      max-width: 1400px;
-      margin: 20px auto;
-      gap: 20px;
-      padding: 0 20px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .logo-mark {
+      font-family: var(--display);
+      font-weight: 900;
+      font-size: 2.4rem;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      background: linear-gradient(115deg, #e0c8ff 0%, var(--accent) 50%, #7020cc 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .logo-sub {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-lo);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .chip {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 2px;
+      border: 1px solid var(--border-hi);
+      color: var(--accent);
+      background: rgba(160, 80, 255, 0.06);
+      letter-spacing: 0.05em;
+    }
+    .chip.gold {
+      border-color: rgba(255, 180, 50, 0.4);
+      color: var(--gold);
+      background: rgba(255, 180, 50, 0.05);
     }
 
-    /* Left panel – item list */
-    .item-list {
-      flex: 1;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(8px);
-      border-radius: 16px;
-      padding: 10px;
-      max-height: 70vh;
-      overflow-y: auto;
+    /* ── HERO ── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      align-items: center;
+    }
+    .hero-text h2 {
+      font-family: var(--display);
+      font-weight: 900;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.9rem;
+    }
+    .hero-text h2 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero-text p {
+      font-weight: 300;
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      max-width: 480px;
+    }
+    .hero-text .warning-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 2px;
+      background: rgba(255, 180, 50, 0.07);
+      border: 1px solid rgba(255, 180, 50, 0.3);
+      color: var(--gold);
+    }
+    .hero-code {
+      background: #08041a;
+      border: 1px solid var(--border-hi);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(120, 60, 210, 0.12), inset 0 0 30px rgba(80,20,160,0.07);
+    }
+    .hero-code-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+    .code-filename {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-lo);
+    }
+    .hero-code pre {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      padding: 1.2rem 1.4rem;
+      line-height: 1.8;
+      color: var(--text-mid);
+      overflow-x: auto;
+    }
+    .json-key   { color: #c084fc; }
+    .json-str   { color: #a3e4b7; }
+    .json-num   { color: #ffd966; }
+    .json-punct { color: #7a6ea0; }
+
+    /* ── CONTRIBUTE BAR ── */
+    .contribute-bar {
+      margin-bottom: 2rem;
+      padding: 0.9rem 1.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      backdrop-filter: blur(10px);
+    }
+    .contribute-bar .icon { color: var(--accent); font-size: 1.1rem; }
+    .contribute-bar code {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      background: rgba(160,80,255,0.1);
+      border: 1px solid var(--border-hi);
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      color: var(--accent);
     }
 
-    .item-list button {
-      display: block;
+    /* ── SEARCH ── */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .search-input {
       width: 100%;
-      background: rgba(255,255,255,0.05);
-      border: none;
-      color: #fff;
+      padding: 0.85rem 1rem 0.85rem 2.8rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+      background: rgba(10, 5, 28, 0.8);
+      border: 1px solid var(--border-hi);
+      border-radius: 3px;
+      color: var(--text-hi);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-input::placeholder { color: var(--text-lo); }
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(160, 80, 255, 0.15);
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .database-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    /* ── LEFT PANEL ── */
+    .list-panel {
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      max-height: 72vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .list-panel-header {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .list-panel-header span {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-lo);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .item-count {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 0.2rem 0.55rem;
+      background: rgba(160,80,255,0.1);
+      border: 1px solid var(--border-hi);
+      border-radius: 2px;
+      color: var(--accent);
+    }
+    .list-scroll {
+      overflow-y: auto;
+      flex: 1;
+      padding: 0.6rem;
+    }
+
+    /* ── ITEM BUTTONS ── */
+    .item-btn {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      width: 100%;
       text-align: left;
-      padding: 12px;
-      margin-bottom: 8px;
-      border-radius: 12px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      padding: 0.7rem 0.85rem;
+      margin-bottom: 0.35rem;
+      color: var(--text-mid);
+      font-family: var(--sans);
+      font-size: 0.82rem;
       cursor: pointer;
-      transition: 0.2s;
-      font-size: 0.9rem;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      position: relative;
     }
-
-    .item-list button:hover {
-      background: rgba(255,255,255,0.15);
-      transform: translateX(4px);
+    .item-btn-name {
+      font-weight: 600;
+      font-size: 0.86rem;
+      color: var(--text-hi);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-family: var(--display);
     }
-
-    .item-list button.active {
-      background: rgba(156, 39, 176, 0.6);
-      border-left: 4px solid #f0f;
+    .item-btn-meta {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-lo);
+      letter-spacing: 0.04em;
     }
-
-    /* Right panel – item details */
-    .item-detail {
-      flex: 2;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(12px);
-      border-radius: 24px;
-      padding: 20px;
-      min-height: 70vh;
+    .item-btn:hover {
+      background: rgba(160,80,255,0.08);
+      border-color: var(--border-hi);
+      color: var(--text-hi);
     }
-
-    .item-detail h2 {
-      margin-top: 0;
-      color: #e0aaff;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-      padding-bottom: 8px;
+    .item-btn.active {
+      background: rgba(160,80,255,0.14);
+      border-color: var(--accent);
+      color: var(--text-hi);
     }
-
-    .item-detail p {
-      margin: 8px 0;
-      line-height: 1.4;
+    .item-btn.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      border-radius: 3px 0 0 3px;
     }
-
-    .label {
-      font-weight: bold;
-      color: #c084fc;
+    .rarity-dot {
       display: inline-block;
-      min-width: 110px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      margin-right: 5px;
+      flex-shrink: 0;
     }
 
-    .rarity-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      background: rgba(0,0,0,0.5);
+    /* ── DETAIL PANEL ── */
+    .detail-panel {
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      min-height: 400px;
     }
 
-    /* Rarity colors */
-    .rarity-1 { color: #aaa; }
-    .rarity-2 { color: #0ff; }
-    .rarity-3 { color: #0f0; }
-    .rarity-4 { color: #f0f; }
-    .rarity-5 { color: #ff0; }
-
-    .error-message {
-      text-align: center;
-      padding: 40px;
-      color: #ffaaaa;
+    .detail-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 400px;
+      gap: 1rem;
+      color: var(--text-lo);
+    }
+    .detail-empty .vault-icon {
+      font-size: 3rem;
+      opacity: 0.3;
+    }
+    .detail-empty p {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
     }
 
-    @media (max-width: 700px) {
-      .container {
-        flex-direction: column;
-      }
-      .item-list {
-        max-height: 40vh;
-      }
+    .detail-header {
+      padding: 1.8rem 2rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
     }
+    .detail-name {
+      font-family: var(--display);
+      font-weight: 900;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      letter-spacing: -0.01em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .detail-subtitle {
+      margin-top: 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-lo);
+      letter-spacing: 0.1em;
+    }
+    .rarity-tag {
+      flex-shrink: 0;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 0.35rem 1rem;
+      border-radius: 2px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .detail-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .detail-section {
+      padding: 1.4rem 2rem;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .detail-section:nth-child(even) { border-right: none; }
+    .detail-section:nth-last-child(-n+2) { border-bottom: none; }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-lo);
+      margin-bottom: 0.45rem;
+    }
+    .section-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-hi);
+      word-break: break-all;
+    }
+    .section-value.mono {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+    .section-value.accent { color: var(--accent); }
+    .detail-full {
+      grid-column: 1 / -1;
+      padding: 1.4rem 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .detail-full:last-child { border-bottom: none; }
+
+    /* Rarity color pairs: [text, bg, border] */
+    .r1 { color: #adb5bd; background: rgba(108,117,125,0.12); border: 1px solid rgba(108,117,125,0.4); }
+    .r2 { color: #9ceeff; background: rgba(13,202,240,0.1);   border: 1px solid rgba(13,202,240,0.4); }
+    .r3 { color: #6ee7a8; background: rgba(46,204,113,0.1);   border: 1px solid rgba(46,204,113,0.4); }
+    .r4 { color: #d8b4fe; background: rgba(168,85,247,0.12);  border: 1px solid rgba(192,132,252,0.5); }
+    .r5 { color: #ffd966; background: rgba(251,191,36,0.1);   border: 1px solid rgba(251,191,36,0.5); }
+
+    .dot-1 { background: #adb5bd; }
+    .dot-2 { background: #9ceeff; }
+    .dot-3 { background: #6ee7a8; }
+    .dot-4 { background: #d8b4fe; }
+    .dot-5 { background: #ffd966; }
+
+    /* scrollbars */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(160,80,255,0.3); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    @media (max-width: 900px) {
+      .database-grid { grid-template-columns: 1fr; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-code { display: none; }
+      .detail-body { grid-template-columns: 1fr; }
+      .detail-section { border-right: none; }
+    }
+
+    /* ── Fade-in animation ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .shell > * { animation: fadeUp 0.4s ease both; }
+    .topbar         { animation-delay: 0.05s; }
+    .hero           { animation-delay: 0.12s; }
+    .contribute-bar { animation-delay: 0.18s; }
+    .search-wrap    { animation-delay: 0.22s; }
+    .database-grid  { animation-delay: 0.28s; }
   </style>
 </head>
 <body>
+<div class="shell">
 
-<h1>🔫 BL4 Items Database</h1>
-<div class="search-box">
-  <input type="text" id="searchInput" placeholder="🔍 Search by name, manufacturer, type, underbarrel...">
-</div>
-
-<div class="container">
-  <div class="item-list" id="itemList">
-    <div style="text-align:center; padding:20px;">Loading items...</div>
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">
+      <span class="logo-mark">VaultDB</span>
+      <span class="logo-sub">/ BL4 Items</span>
+    </div>
+    <div class="topbar-right">
+      <span class="chip">v1.0.0</span>
+      <span class="chip gold">⚡ Community</span>
+    </div>
   </div>
-  <div class="item-detail" id="itemDetail">
-    <h2>Select an item from the left</h2>
-    <p>Click on any item to see full details.</p>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-text">
+      <h2>The Best<br><em>Borderlands 4</em><br>Item Database.</h2>
+      <p>OrdoniteDB is a community database for perfect BL4 items and builds. The main destination for god rolls, ideal parts, and proven builds — all vanilla-only.</p>
+      <span class="warning-pill">⚠ Items must be obtainable in vanilla BL4</span>
+    </div>
+    <div class="hero-code">
+      <div class="hero-code-header">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="code-filename">items/mantra.json</span>
+      </div>
+      <pre><span class="json-punct">{</span>
+  <span class="json-key">"serial"</span><span class="json-punct">:</span>      <span class="json-str">"@CgxFw!2}TYg..."</span><span class="json-punct">,</span>
+  <span class="json-key">"decoded-id"</span><span class="json-punct">:</span>  <span class="json-str">"{100} {1} {4} {8}..."</span><span class="json-punct">,</span>
+  <span class="json-key">"name"</span><span class="json-punct">:</span>        <span class="json-str">"mantra"</span><span class="json-punct">,</span>
+  <span class="json-key">"type"</span><span class="json-punct">:</span>        <span class="json-str">"shotgun"</span><span class="json-punct">,</span>
+  <span class="json-key">"rarity"</span><span class="json-punct">:</span>      <span class="json-num">5</span><span class="json-punct">,</span>
+  <span class="json-key">"manufacturer"</span><span class="json-punct">:</span><span class="json-str">"hyperion"</span><span class="json-punct">,</span>
+  <span class="json-key">"level"</span><span class="json-punct">:</span>       <span class="json-num">60</span><span class="json-punct">,</span>
+  <span class="json-key">"underbarrel"</span><span class="json-punct">:</span> <span class="json-str">"cov"</span><span class="json-punct">,</span>
+  <span class="json-key">"uploader"</span><span class="json-punct">:</span>    <span class="json-str">"Your name"</span>
+<span class="json-punct">}</span></pre>
+    </div>
+  </div>
+
+  <!-- CONTRIBUTE BAR -->
+  <div class="contribute-bar">
+    <span class="icon">📦</span>
+    <span>To contribute: add JSON files to <code>/items/</code>, decode serials with any save editor, then open a Pull Request or DM the maintainer.</span>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input class="search-input" id="searchInput" type="text" placeholder="Search name, manufacturer, type, underbarrel...">
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="database-grid">
+
+    <!-- LEFT: item list -->
+    <div class="list-panel">
+      <div class="list-panel-header">
+        <span>Items</span>
+        <span class="item-count" id="itemCount">—</span>
+      </div>
+      <div class="list-scroll" id="itemList">
+        <div style="padding:1.5rem; text-align:center; font-family:var(--mono); font-size:0.75rem; color:var(--text-lo);">Loading items…</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: detail -->
+    <div class="detail-panel" id="itemDetail">
+      <div class="detail-empty">
+        <div class="vault-icon">🔒</div>
+        <p>SELECT AN ITEM TO VIEW DETAILS</p>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
-  // ======================= CONFIGURATION =======================
-  const GITHUB_USER = "OrdoniteDB";   // <-- CHANGE THIS
-  const GITHUB_REPO  = "Database";      // <-- CHANGE THIS
-  const ITEMS_FOLDER = "items";           // folder where your .json files live
-  // ==============================================================
+  // ========== CONFIGURATION ==========
+  const GITHUB_USER  = "YOUR_USERNAME";
+  const GITHUB_REPO  = "YOUR_REPO";
+  const ITEMS_FOLDER = "items";
+  // ====================================
 
-  let allItems = [];        // array of all parsed items
-  let filteredItems = [];   // after search
-  let currentHash = null;
+  let allItems = [];
+  let filteredItems = [];
+  let currentIdx = null;
 
-  // ---------- 1. JSON repair function (fixes missing commas, quotes, trailing commas) ----------
-  function repairJSON(badJSON) {
-    // Remove BOM and trim
-    let cleaned = badJSON.trim();
-    // Fix missing commas between properties:  "key": "value"  "key2": "value2"
-    cleaned = cleaned.replace(/"\s*:\s*("[^"]*"|\d+|true|false|null)\s+"/g, (match, p1) => {
-      return `" : ${p1}, "`;
-    });
-    // Fix missing commas before } or ] (trailing commas are allowed in JS but not JSON? We'll remove them)
-    cleaned = cleaned.replace(/,(\s*[}\]])/g, '$1');
-    // Fix unquoted property names (like decoded-id: without quotes)
-    cleaned = cleaned.replace(/([{,]\s*)([a-zA-Z0-9_-]+)(\s*:)/g, '$1"$2"$3');
-    // Fix missing quotes around string values (simple heuristic)
-    cleaned = cleaned.replace(/:\s*([a-zA-Z0-9_\-\/]+)(\s*[,}])/g, ':"$1"$2');
-    // Remove any trailing commas inside objects/arrays
-    cleaned = cleaned.replace(/,(\s*[}\]])/g, '$1');
-    return cleaned;
+  const RARITY = {
+    1: { name: "Common",    cls: "r1", dot: "dot-1" },
+    2: { name: "Uncommon",  cls: "r2", dot: "dot-2" },
+    3: { name: "Rare",      cls: "r3", dot: "dot-3" },
+    4: { name: "Epic",      cls: "r4", dot: "dot-4" },
+    5: { name: "Legendary", cls: "r5", dot: "dot-5" }
+  };
+
+  function cap(str) {
+    if (!str) return "—";
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+  function esc(str) {
+    return String(str ?? "").replace(/[&<>"']/g, m =>
+      ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
   }
 
-  async function fetchAndFixJSON(url) {
-    const response = await fetch(url);
-    let text = await response.text();
-    try {
-      // first try to parse as is
-      return JSON.parse(text);
-    } catch (e) {
-      console.warn(`Repairing JSON from ${url}`, e.message);
-      const repaired = repairJSON(text);
-      try {
-        return JSON.parse(repaired);
-      } catch (e2) {
-        console.error(`Could not repair ${url}:`, e2);
-        throw new Error(`Invalid JSON in ${url}`);
-      }
-    }
+  function repairJSON(text) {
+    let s = text.trim();
+    s = s.replace(/"\s*:\s*("[^"]*"|\d+|true|false|null)\s+"/g, (m,p1) => `" : ${p1}, "`);
+    s = s.replace(/([{,]\s*)([a-zA-Z0-9_-]+)(\s*:)/g, '$1"$2"$3');
+    s = s.replace(/:\s*([a-zA-Z0-9_\-\/]+)(\s*[,}])/g, ':"$1"$2');
+    s = s.replace(/,(\s*[}\]])/g, '$1');
+    return s;
   }
 
-  // ---------- 2. Get list of JSON files from GitHub API ----------
-  async function getJSONFiles() {
-    const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${ITEMS_FOLDER}`;
-    const res = await fetch(apiUrl);
-    if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+  async function fetchJSON(url) {
+    const res = await fetch(url);
+    const text = await res.text();
+    try { return JSON.parse(text); }
+    catch (e) { return JSON.parse(repairJSON(text)); }
+  }
+
+  async function getFiles() {
+    const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${ITEMS_FOLDER}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`GitHub API ${res.status}`);
     const files = await res.json();
     return files.filter(f => f.name.endsWith('.json')).map(f => f.download_url);
   }
 
-  // ---------- 3. Load all items from all JSON files ----------
-  async function loadAllItems() {
-    const fileUrls = await getJSONFiles();
-    const itemsArray = [];
-    for (const url of fileUrls) {
+  async function loadAll() {
+    const urls = await getFiles();
+    const items = [];
+    for (const url of urls) {
       try {
-        const data = await fetchAndFixJSON(url);
-        if (Array.isArray(data)) {
-          itemsArray.push(...data);
-        } else {
-          itemsArray.push(data);
-        }
-      } catch (err) {
-        console.error(`Skipping ${url}:`, err);
-      }
+        const data = await fetchJSON(url);
+        if (Array.isArray(data)) items.push(...data);
+        else items.push(data);
+      } catch (err) { console.error("Skip", url, err); }
     }
-    return itemsArray;
+    return items;
   }
 
-  // ---------- 4. Render left list (filtered) ----------
-  function renderItemList(items) {
+  function renderList(items) {
     const container = document.getElementById('itemList');
+    document.getElementById('itemCount').textContent = items.length;
+
     if (!items.length) {
-      container.innerHTML = '<div style="padding:20px; text-align:center;">No items match your search.</div>';
+      container.innerHTML = `<div style="padding:1.5rem;text-align:center;font-family:var(--mono);font-size:0.75rem;color:var(--text-lo);">No items found.</div>`;
       return;
     }
     container.innerHTML = '';
-    items.forEach((item, idx) => {
-      // keep original index in allItems for hash referencing
-      const globalIndex = allItems.indexOf(item);
+    items.forEach(item => {
+      const gIdx = allItems.indexOf(item);
+      const r = RARITY[item.rarity] || RARITY[1];
       const btn = document.createElement('button');
-      btn.textContent = `${item.manufacturer || '?'} ${item.type || 'item'} (${item.name || 'unnamed'}) - Lv${item.level || '?'}`;
-      btn.onclick = () => selectItem(globalIndex);
-      btn.id = `itemBtn-${globalIndex}`;
+      btn.className = 'item-btn' + (currentIdx === gIdx ? ' active' : '');
+      btn.id = `btn-${gIdx}`;
+      btn.innerHTML = `
+        <span class="item-btn-name">
+          <span class="rarity-dot ${r.dot}"></span>${esc(item.name || 'Unnamed')}
+        </span>
+        <span class="item-btn-meta">${cap(item.manufacturer)} · ${cap(item.type)} · Lv${item.level ?? '?'}</span>
+      `;
+      btn.onclick = () => selectItem(gIdx);
       container.appendChild(btn);
     });
-    // highlight active button based on current hash
-    if (currentHash !== null) {
-      const activeBtn = document.getElementById(`itemBtn-${currentHash}`);
-      if (activeBtn) activeBtn.classList.add('active');
-    }
   }
 
-  // ---------- 5. Show details of selected item ----------
-  function selectItem(index) {
-    const item = allItems[index];
+  function selectItem(idx) {
+    const item = allItems[idx];
     if (!item) return;
+    currentIdx = idx;
+    window.location.hash = idx;
 
-    currentHash = index;
-    window.location.hash = index;
+    const r = RARITY[item.rarity] || RARITY[1];
+    const decoded = item['decoded-id'] || item['decoded id'] || '—';
+    const detail = document.getElementById('itemDetail');
 
-    // Update detail panel
-    const detailDiv = document.getElementById('itemDetail');
-    const rarityClass = `rarity-${item.rarity || 1}`;
-    let html = `
-      <h2 class="${rarityClass}">${item.manufacturer || 'Unknown'} ${item.type || 'item'} – ${item.name || 'No name'}</h2>
-      <p><span class="label">Serial:</span> ${escapeHtml(item.serial || '—')}</p>
-      <p><span class="label">Decoded ID:</span> ${escapeHtml(item['decoded-id'] || item['decoded id'] || '—')}</p>
-      <p><span class="label">Level:</span> ${item.level || '—'}</p>
-      <p><span class="label">Manufacturer:</span> ${item.manufacturer || '—'}</p>
-      <p><span class="label">Underbarrel:</span> ${item.underbarrel || 'None'}</p>
+    detail.innerHTML = `
+      <div class="detail-header">
+        <div>
+          <div class="detail-name">${esc(item.name || 'Unknown')}</div>
+          <div class="detail-subtitle">${cap(item.manufacturer)} · ${cap(item.type)}</div>
+        </div>
+        <span class="rarity-tag ${r.cls}">${r.name}</span>
+      </div>
+      <div class="detail-body">
+        <div class="detail-section">
+          <div class="section-label">Manufacturer</div>
+          <div class="section-value accent">${cap(item.manufacturer)}</div>
+        </div>
+        <div class="detail-section">
+          <div class="section-label">Type</div>
+          <div class="section-value">${cap(item.type)}</div>
+        </div>
+        <div class="detail-section">
+          <div class="section-label">Level</div>
+          <div class="section-value">${esc(item.level ?? '—')}</div>
+        </div>
+        <div class="detail-section">
+          <div class="section-label">Underbarrel</div>
+          <div class="section-value">${cap(item.underbarrel || 'None')}</div>
+        </div>
+        ${item.magazine ? `
+        <div class="detail-section">
+          <div class="section-label">Magazine</div>
+          <div class="section-value">${cap(item.magazine)}</div>
+        </div>
+        <div class="detail-section">
+          <div class="section-label">Uploader</div>
+          <div class="section-value">${esc(item.uploader || 'unknown')}</div>
+        </div>` : `
+        <div class="detail-section" style="grid-column:1/-1">
+          <div class="section-label">Uploader</div>
+          <div class="section-value">${esc(item.uploader || 'unknown')}</div>
+        </div>`}
+        <div class="detail-full">
+          <div class="section-label">Serial</div>
+          <div class="section-value mono">${esc(item.serial || '—')}</div>
+        </div>
+        <div class="detail-full">
+          <div class="section-label">Decoded ID</div>
+          <div class="section-value mono">${esc(decoded)}</div>
+        </div>
+      </div>
     `;
-    if (item.magazine) html += `<p><span class="label">Magazine:</span> ${escapeHtml(item.magazine)}</p>`;
-    html += `<p><span class="label">Uploader:</span> ${item.uploader || 'unknown'}</p>`;
-    html += `<p><span class="label">Rarity:</span> <span class="rarity-badge ${rarityClass}">${item.rarity || 1}/5</span></p>`;
-    detailDiv.innerHTML = html;
 
-    // Update active button highlight
-    document.querySelectorAll('.item-list button').forEach(btn => btn.classList.remove('active'));
-    const activeBtn = document.getElementById(`itemBtn-${index}`);
-    if (activeBtn) activeBtn.classList.add('active');
+    document.querySelectorAll('.item-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`btn-${idx}`)?.classList.add('active');
   }
 
-  // simple XSS protection
-  function escapeHtml(str) {
-    return String(str).replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
+  function filter(term) {
+    const t = term.toLowerCase().trim();
+    filteredItems = t ? allItems.filter(item =>
+      [item.name, item.manufacturer, item.type, item.underbarrel, item.serial]
+        .some(v => v && v.toLowerCase().includes(t))
+    ) : [...allItems];
+    renderList(filteredItems);
   }
 
-  // ---------- 6. Search/filter logic ----------
-  function filterItems(searchTerm) {
-    if (!searchTerm.trim()) {
-      filteredItems = [...allItems];
-    } else {
-      const term = searchTerm.toLowerCase();
-      filteredItems = allItems.filter(item => {
-        return (item.name && item.name.toLowerCase().includes(term)) ||
-               (item.manufacturer && item.manufacturer.toLowerCase().includes(term)) ||
-               (item.type && item.type.toLowerCase().includes(term)) ||
-               (item.underbarrel && item.underbarrel.toLowerCase().includes(term)) ||
-               (item.serial && item.serial.toLowerCase().includes(term));
-      });
-    }
-    renderItemList(filteredItems);
-    // If the currently selected item is no longer visible, clear detail view
-    if (currentHash !== null && !filteredItems.includes(allItems[currentHash])) {
-      document.getElementById('itemDetail').innerHTML = '<h2>Item not in current search</h2><p>Clear search to see it again.</p>';
-      currentHash = null;
-      window.location.hash = '';
-    } else if (currentHash !== null && filteredItems.length) {
-      // keep detail view but refresh highlight
-      const stillThere = filteredItems.includes(allItems[currentHash]);
-      if (!stillThere) {
-        document.getElementById('itemDetail').innerHTML = '<h2>Item hidden by search</h2>';
-      } else {
-        selectItem(currentHash);
-      }
-    }
-  }
-
-  // ---------- 7. Initialization ----------
   async function init() {
     const listContainer = document.getElementById('itemList');
     try {
-      allItems = await loadAllItems();
-      if (allItems.length === 0) {
-        listContainer.innerHTML = '<div class="error-message">No items found in /items/ folder. Please add some .json files.</div>';
+      allItems = await loadAll();
+      if (!allItems.length) {
+        listContainer.innerHTML = `<div style="padding:1.5rem;font-family:var(--mono);font-size:0.75rem;color:var(--text-lo);">⚠ No items in /items/ — add some .json files.</div>`;
+        document.getElementById('itemCount').textContent = '0';
         return;
       }
       filteredItems = [...allItems];
-      renderItemList(filteredItems);
+      renderList(filteredItems);
 
-      // Restore from URL hash
-      const hash = window.location.hash.substring(1);
-      if (hash && /^\d+$/.test(hash)) {
-        const idx = parseInt(hash, 10);
-        if (idx >= 0 && idx < allItems.length) {
-          selectItem(idx);
-        } else {
-          selectItem(0);
-        }
-      } else if (allItems.length) {
-        selectItem(0);
-      }
+      const hash = window.location.hash.slice(1);
+      const startIdx = hash && /^\d+$/.test(hash) ? parseInt(hash) : 0;
+      if (startIdx >= 0 && startIdx < allItems.length) selectItem(startIdx);
 
-      // Setup search listener
-      const searchInput = document.getElementById('searchInput');
-      searchInput.addEventListener('input', (e) => filterItems(e.target.value));
-
+      document.getElementById('searchInput').addEventListener('input', e => filter(e.target.value));
     } catch (err) {
       console.error(err);
-      listContainer.innerHTML = `<div class="error-message">Failed to load items: ${err.message}<br>Make sure your GitHub username/repo are correct and the /items/ folder exists.</div>`;
+      listContainer.innerHTML = `<div style="padding:1.5rem;font-family:var(--mono);font-size:0.75rem;color:#f87171;">Failed: ${esc(err.message)}</div>`;
+      document.getElementById('itemCount').textContent = 'ERR';
     }
   }
 
