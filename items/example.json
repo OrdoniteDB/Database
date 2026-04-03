@@ -1,11 +1,11 @@
 {
   "serial": "@CgxFw!2}TYg...",
   "decoded-id": "{100} {1} {4} {8} {17}..."
-  "name": "Mantra",
-  "type": "Shotgun",
+  "name": "mantra",
+  "type": "shotgun",
   "rarity": 5,
-  "manufacturer": "Hyperion",
+  "manufacturer": "hyperion",
   "level": 60,
-  "parts": "COV"
-  "uploader": "Your name"
+  "parts": "cov"
+  "uploader": "your name"
 }
