@@ -1,177 +1,379 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BL4 Items Database</title>
-<style>
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(180deg, #1a001a 0%, #4b004b 100%);
-    color: #fff;
-    min-height: 100vh;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BL4 Items Database</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-  h1 {
-    text-align: center;
-    margin: 20px 0;
-    font-size: 2rem;
-    text-shadow: 0 0 8px rgba(0,0,0,0.7);
-  }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a000a 0%, #2a0a2a 50%, #4a0a4a 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
 
-  .container {
-    display: flex;
-    flex-direction: row;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
+    h1 {
+      text-align: center;
+      margin: 20px 0 10px;
+      font-size: 2rem;
+      text-shadow: 0 0 8px rgba(0,0,0,0.7);
+    }
 
-  .item-list {
-    flex: 1;
-    overflow-y: auto;
-    max-height: 80vh;
-    border-right: 1px solid rgba(255,255,255,0.2);
-    padding: 10px;
-  }
+    .search-box {
+      text-align: center;
+      margin: 20px auto;
+    }
 
-  .item-list button {
-    display: block;
-    width: 100%;
-    background: rgba(0,0,0,0.5);
-    color: #fff;
-    border: none;
-    padding: 10px;
-    margin-bottom: 5px;
-    text-align: left;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
-  }
+    .search-box input {
+      width: 80%;
+      max-width: 400px;
+      padding: 10px 15px;
+      border-radius: 30px;
+      border: none;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-size: 1rem;
+      backdrop-filter: blur(4px);
+    }
 
-  .item-list button:hover {
-    background: rgba(255,255,255,0.1);
-  }
+    .search-box input::placeholder {
+      color: #ddd;
+    }
 
-  .item-list button.active {
-    background: rgba(255,255,255,0.2);
-  }
+    .container {
+      display: flex;
+      flex-direction: row;
+      max-width: 1400px;
+      margin: 20px auto;
+      gap: 20px;
+      padding: 0 20px;
+    }
 
-  .item-detail {
-    flex: 2;
-    padding: 20px;
-    background: rgba(0,0,0,0.4);
-    border-radius: 12px;
-    margin-left: 10px;
-    min-height: 80vh;
-    backdrop-filter: blur(6px);
-  }
+    /* Left panel – item list */
+    .item-list {
+      flex: 1;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+      border-radius: 16px;
+      padding: 10px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
 
-  .item-detail h2 {
-    margin-top: 0;
-    color: #f0f;
-  }
+    .item-list button {
+      display: block;
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: none;
+      color: #fff;
+      text-align: left;
+      padding: 12px;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.9rem;
+    }
 
-  .item-detail p {
-    margin: 5px 0;
-  }
+    .item-list button:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateX(4px);
+    }
 
-  .label {
-    font-weight: bold;
-    color: #ddd;
-  }
-</style>
+    .item-list button.active {
+      background: rgba(156, 39, 176, 0.6);
+      border-left: 4px solid #f0f;
+    }
+
+    /* Right panel – item details */
+    .item-detail {
+      flex: 2;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 20px;
+      min-height: 70vh;
+    }
+
+    .item-detail h2 {
+      margin-top: 0;
+      color: #e0aaff;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 8px;
+    }
+
+    .item-detail p {
+      margin: 8px 0;
+      line-height: 1.4;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #c084fc;
+      display: inline-block;
+      min-width: 110px;
+    }
+
+    .rarity-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      background: rgba(0,0,0,0.5);
+    }
+
+    /* Rarity colors */
+    .rarity-1 { color: #aaa; }
+    .rarity-2 { color: #0ff; }
+    .rarity-3 { color: #0f0; }
+    .rarity-4 { color: #f0f; }
+    .rarity-5 { color: #ff0; }
+
+    .error-message {
+      text-align: center;
+      padding: 40px;
+      color: #ffaaaa;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        flex-direction: column;
+      }
+      .item-list {
+        max-height: 40vh;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<h1>BL4 Items Database</h1>
+<h1>🔫 BL4 Items Database</h1>
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="🔍 Search by name, manufacturer, type, underbarrel...">
+</div>
 
 <div class="container">
-  <div class="item-list" id="itemList"></div>
+  <div class="item-list" id="itemList">
+    <div style="text-align:center; padding:20px;">Loading items...</div>
+  </div>
   <div class="item-detail" id="itemDetail">
-    <h2>Select an item to view details</h2>
+    <h2>Select an item from the left</h2>
+    <p>Click on any item to see full details.</p>
   </div>
 </div>
 
 <script>
-const items = [
-  {
-    "name": "Dullahan",
-    "type": "Shotgun",
-    "rarity": 4,
-    "manufacturer": "Jakobs",
-    "level": 60,
-    "underbarrel": "Spread Launcher",
-    "serial": "@Ugd_t@FnkbUDm~C$RG/{psJf_osD7w@s87X3-9eQ?okGPz<w5",
-    "decoded": "9, 0, 1, 60 | 2, 1861 || {91} {2} {4} {6} {90} {59} {62} {61} {15} {88} {27} {34} {35} {40} {44}",
-    "uploader": "owner"
-  },
-  {
-    "name": "Balor",
-    "type": "Shotgun",
-    "rarity": 4,
-    "manufacturer": "Jakobs",
-    "level": 60,
-    "underbarrel": "None",
-    "serial": "@Ugd_t@FnkbUq#RIbRG/{ps6/DpA8H@!9;z=Y4k{074=NTaCE{Uhd;t",
-    "decoded": "9, 0, 1, 60 | 2, 802 || {98} {2} {4} {6} {5} {8} {62} {61} {59} {94} {24} {28} {29} {40} {68} | c, 94",
-    "uploader": "owner"
-  },
-  {
-    "name": "Shalashaska",
-    "type": "Pistol",
-    "rarity": 5,
-    "manufacturer": "Jakobs",
-    "level": 60,
-    "underbarrel": "Ammo Switcher",
-    "magazine": "Torgue Impact",
-    "serial": "@UgbV{rFnkbUC/%H5RG}7?sIsVYsC1}ys85wa-9eQ?okG<@{X&gI00",
-    "decoded": "3, 0, 1, 60 | 2, 2884 || {83} {2} {5} {4} {82} {51} {52} {54} {15} {18} {27} {34} {35} {42} {47} {65}",
-    "uploader": "owner"
+  // ======================= CONFIGURATION =======================
+  const GITHUB_USER = "OrdoniteDB";   // <-- CHANGE THIS
+  const GITHUB_REPO  = "Database";      // <-- CHANGE THIS
+  const ITEMS_FOLDER = "items";           // folder where your .json files live
+  // ==============================================================
+
+  let allItems = [];        // array of all parsed items
+  let filteredItems = [];   // after search
+  let currentHash = null;
+
+  // ---------- 1. JSON repair function (fixes missing commas, quotes, trailing commas) ----------
+  function repairJSON(badJSON) {
+    // Remove BOM and trim
+    let cleaned = badJSON.trim();
+    // Fix missing commas between properties:  "key": "value"  "key2": "value2"
+    cleaned = cleaned.replace(/"\s*:\s*("[^"]*"|\d+|true|false|null)\s+"/g, (match, p1) => {
+      return `" : ${p1}, "`;
+    });
+    // Fix missing commas before } or ] (trailing commas are allowed in JS but not JSON? We'll remove them)
+    cleaned = cleaned.replace(/,(\s*[}\]])/g, '$1');
+    // Fix unquoted property names (like decoded-id: without quotes)
+    cleaned = cleaned.replace(/([{,]\s*)([a-zA-Z0-9_-]+)(\s*:)/g, '$1"$2"$3');
+    // Fix missing quotes around string values (simple heuristic)
+    cleaned = cleaned.replace(/:\s*([a-zA-Z0-9_\-\/]+)(\s*[,}])/g, ':"$1"$2');
+    // Remove any trailing commas inside objects/arrays
+    cleaned = cleaned.replace(/,(\s*[}\]])/g, '$1');
+    return cleaned;
   }
-];
 
-// Populate list
-const itemList = document.getElementById('itemList');
-const itemDetail = document.getElementById('itemDetail');
+  async function fetchAndFixJSON(url) {
+    const response = await fetch(url);
+    let text = await response.text();
+    try {
+      // first try to parse as is
+      return JSON.parse(text);
+    } catch (e) {
+      console.warn(`Repairing JSON from ${url}`, e.message);
+      const repaired = repairJSON(text);
+      try {
+        return JSON.parse(repaired);
+      } catch (e2) {
+        console.error(`Could not repair ${url}:`, e2);
+        throw new Error(`Invalid JSON in ${url}`);
+      }
+    }
+  }
 
-items.forEach((item, index) => {
-  const btn = document.createElement('button');
-  btn.textContent = `${item.manufacturer} ${item.type} (${item.name}) - Level ${item.level}`;
-  btn.onclick = () => selectItem(index);
-  btn.id = 'itemBtn' + index;
-  itemList.appendChild(btn);
-});
+  // ---------- 2. Get list of JSON files from GitHub API ----------
+  async function getJSONFiles() {
+    const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${ITEMS_FOLDER}`;
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+    const files = await res.json();
+    return files.filter(f => f.name.endsWith('.json')).map(f => f.download_url);
+  }
 
-function selectItem(index) {
-  const item = items[index];
-  
-  // Update detail panel
-  let html = `<h2>${item.manufacturer} ${item.type} (${item.name})</h2>`;
-  html += `<p><span class="label">Serial:</span> ${item.serial}</p>`;
-  html += `<p><span class="label">Decoded:</span> ${item.decoded}</p>`;
-  html += `<p><span class="label">Level:</span> ${item.level}</p>`;
-  html += `<p><span class="label">Manufacturer:</span> ${item.manufacturer}</p>`;
-  html += `<p><span class="label">Underbarrel:</span> ${item.underbarrel || 'None'}</p>`;
-  if(item.magazine) html += `<p><span class="label">Magazine:</span> ${item.magazine}</p>`;
-  html += `<p><span class="label">Uploader:</span> ${item.uploader}</p>`;
-  itemDetail.innerHTML = html;
+  // ---------- 3. Load all items from all JSON files ----------
+  async function loadAllItems() {
+    const fileUrls = await getJSONFiles();
+    const itemsArray = [];
+    for (const url of fileUrls) {
+      try {
+        const data = await fetchAndFixJSON(url);
+        if (Array.isArray(data)) {
+          itemsArray.push(...data);
+        } else {
+          itemsArray.push(data);
+        }
+      } catch (err) {
+        console.error(`Skipping ${url}:`, err);
+      }
+    }
+    return itemsArray;
+  }
 
-  // Update URL hash
-  window.location.hash = index;
+  // ---------- 4. Render left list (filtered) ----------
+  function renderItemList(items) {
+    const container = document.getElementById('itemList');
+    if (!items.length) {
+      container.innerHTML = '<div style="padding:20px; text-align:center;">No items match your search.</div>';
+      return;
+    }
+    container.innerHTML = '';
+    items.forEach((item, idx) => {
+      // keep original index in allItems for hash referencing
+      const globalIndex = allItems.indexOf(item);
+      const btn = document.createElement('button');
+      btn.textContent = `${item.manufacturer || '?'} ${item.type || 'item'} (${item.name || 'unnamed'}) - Lv${item.level || '?'}`;
+      btn.onclick = () => selectItem(globalIndex);
+      btn.id = `itemBtn-${globalIndex}`;
+      container.appendChild(btn);
+    });
+    // highlight active button based on current hash
+    if (currentHash !== null) {
+      const activeBtn = document.getElementById(`itemBtn-${currentHash}`);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+  }
 
-  // Update active button
-  document.querySelectorAll('.item-list button').forEach((b, i) => {
-    b.classList.toggle('active', i === index);
-  });
-}
+  // ---------- 5. Show details of selected item ----------
+  function selectItem(index) {
+    const item = allItems[index];
+    if (!item) return;
 
-// Load item from URL hash
-const hashIndex = parseInt(window.location.hash.replace('#',''));
-if(!isNaN(hashIndex) && items[hashIndex]) {
-  selectItem(hashIndex);
-}
+    currentHash = index;
+    window.location.hash = index;
+
+    // Update detail panel
+    const detailDiv = document.getElementById('itemDetail');
+    const rarityClass = `rarity-${item.rarity || 1}`;
+    let html = `
+      <h2 class="${rarityClass}">${item.manufacturer || 'Unknown'} ${item.type || 'item'} – ${item.name || 'No name'}</h2>
+      <p><span class="label">Serial:</span> ${escapeHtml(item.serial || '—')}</p>
+      <p><span class="label">Decoded ID:</span> ${escapeHtml(item['decoded-id'] || item['decoded id'] || '—')}</p>
+      <p><span class="label">Level:</span> ${item.level || '—'}</p>
+      <p><span class="label">Manufacturer:</span> ${item.manufacturer || '—'}</p>
+      <p><span class="label">Underbarrel:</span> ${item.underbarrel || 'None'}</p>
+    `;
+    if (item.magazine) html += `<p><span class="label">Magazine:</span> ${escapeHtml(item.magazine)}</p>`;
+    html += `<p><span class="label">Uploader:</span> ${item.uploader || 'unknown'}</p>`;
+    html += `<p><span class="label">Rarity:</span> <span class="rarity-badge ${rarityClass}">${item.rarity || 1}/5</span></p>`;
+    detailDiv.innerHTML = html;
+
+    // Update active button highlight
+    document.querySelectorAll('.item-list button').forEach(btn => btn.classList.remove('active'));
+    const activeBtn = document.getElementById(`itemBtn-${index}`);
+    if (activeBtn) activeBtn.classList.add('active');
+  }
+
+  // simple XSS protection
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // ---------- 6. Search/filter logic ----------
+  function filterItems(searchTerm) {
+    if (!searchTerm.trim()) {
+      filteredItems = [...allItems];
+    } else {
+      const term = searchTerm.toLowerCase();
+      filteredItems = allItems.filter(item => {
+        return (item.name && item.name.toLowerCase().includes(term)) ||
+               (item.manufacturer && item.manufacturer.toLowerCase().includes(term)) ||
+               (item.type && item.type.toLowerCase().includes(term)) ||
+               (item.underbarrel && item.underbarrel.toLowerCase().includes(term)) ||
+               (item.serial && item.serial.toLowerCase().includes(term));
+      });
+    }
+    renderItemList(filteredItems);
+    // If the currently selected item is no longer visible, clear detail view
+    if (currentHash !== null && !filteredItems.includes(allItems[currentHash])) {
+      document.getElementById('itemDetail').innerHTML = '<h2>Item not in current search</h2><p>Clear search to see it again.</p>';
+      currentHash = null;
+      window.location.hash = '';
+    } else if (currentHash !== null && filteredItems.length) {
+      // keep detail view but refresh highlight
+      const stillThere = filteredItems.includes(allItems[currentHash]);
+      if (!stillThere) {
+        document.getElementById('itemDetail').innerHTML = '<h2>Item hidden by search</h2>';
+      } else {
+        selectItem(currentHash);
+      }
+    }
+  }
+
+  // ---------- 7. Initialization ----------
+  async function init() {
+    const listContainer = document.getElementById('itemList');
+    try {
+      allItems = await loadAllItems();
+      if (allItems.length === 0) {
+        listContainer.innerHTML = '<div class="error-message">No items found in /items/ folder. Please add some .json files.</div>';
+        return;
+      }
+      filteredItems = [...allItems];
+      renderItemList(filteredItems);
+
+      // Restore from URL hash
+      const hash = window.location.hash.substring(1);
+      if (hash && /^\d+$/.test(hash)) {
+        const idx = parseInt(hash, 10);
+        if (idx >= 0 && idx < allItems.length) {
+          selectItem(idx);
+        } else {
+          selectItem(0);
+        }
+      } else if (allItems.length) {
+        selectItem(0);
+      }
+
+      // Setup search listener
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', (e) => filterItems(e.target.value));
+
+    } catch (err) {
+      console.error(err);
+      listContainer.innerHTML = `<div class="error-message">Failed to load items: ${err.message}<br>Make sure your GitHub username/repo are correct and the /items/ folder exists.</div>`;
+    }
+  }
+
+  init();
 </script>
-
 </body>
 </html>
