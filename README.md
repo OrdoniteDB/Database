@@ -36,8 +36,8 @@ This project was made to be the main place for people looking for god rolls and 
   "rarity": 5,
   "manufacturer": "Hyperion",
   "level": 60,
-  "notes": "Ground breaker rip"
-  "uploader": "Your name (try not to switch)"
+  "parts": "COV"
+  "uploader": "Your name"
 }
 ```
 
