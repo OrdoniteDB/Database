@@ -30,12 +30,12 @@ This project was made to be the main place for people looking for god rolls and 
 ```json
 {
   "serial": "@CgxFw!2}TYg...",
+  "decoded-id": "{100} {1} {4} {8} {17}..."
   "name": "Mantra",
   "type": "Gun",
   "rarity": 5,
   "manufacturer": "Hyperion",
   "level": 60,
-  "parts": [28, 46],
   "notes": "Ground breaker rip"
   "uploader": "Your name (try not to switch)"
 }
