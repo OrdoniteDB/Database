@@ -1,1 +1,123 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BL4 Items Database</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom right, rgba(115, 25, 249, 0.3), rgba(255,255,255,0.3));
+    backdrop-filter: blur(8px);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    margin: 20px 0;
+    color: #fff;
+    text-shadow: 0 0 8px rgba(0,0,0,0.5);
+  }
+
+  .item-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    width: 90%;
+    max-width: 1200px;
+    margin-bottom: 40px;
+  }
+
+  .item-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    color: #fff;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+  }
+
+  .item-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .item-card h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+  }
+
+  .item-card p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+  }
+
+  .rarity-1 { color: #aaa; }
+  .rarity-2 { color: #0ff; }
+  .rarity-3 { color: #0f0; }
+  .rarity-4 { color: #f0f; }
+  .rarity-5 { color: #ff0; }
+
+</style>
+</head>
+<body>
+
+<h1>BL4 Items Database</h1>
+<div class="item-container" id="itemContainer"></div>
+
+<script>
+  const owner = 'OrdoniteDB'; // Replace with your GitHub username
+  const repo = 'Database';     // Replace with your repository name
+  const path = 'items';        // Folder path in repo
+
+  async function loadItems() {
+    const container = document.getElementById('itemContainer');
+
+    try {
+      // 1. Get list of all files in /items folder via GitHub API
+      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
+      const files = await res.json();
+
+      // 2. Filter for JSON files only
+      const jsonFiles = files.filter(f => f.name.endsWith('.json'));
+
+      // 3. Fetch each JSON file and display
+      for (const file of jsonFiles) {
+        const dataRes = await fetch(file.download_url);
+        const data = await dataRes.json();
+        const items = Array.isArray(data) ? data : [data];
+
+        items.forEach(item => {
+          const card = document.createElement('div');
+          card.classList.add('item-card', `rarity-${item.rarity}`);
+
+          card.innerHTML = `
+            <h2>${item.name} (${item.type})</h2>
+            <p><strong>Serial:</strong> ${item.serial}</p>
+            <p><strong>Decoded ID:</strong> ${item['decoded-id'] || item['decoded id']}</p>
+            <p><strong>Manufacturer:</strong> ${item.manufacturer}</p>
+            <p><strong>Level:</strong> ${item.level}</p>
+            <p><strong>Underbarrel:</strong> ${item.underbarrel}</p>
+            ${item.magazine ? `<p><strong>Magazine:</strong> ${item.magazine}</p>` : ''}
+            <p><strong>Uploader:</strong> ${item.uploader}</p>
+          `;
+
+          container.appendChild(card);
+        });
+      }
+
+    } catch (err) {
+      console.error('Error loading items:', err);
+      container.innerHTML = '<p style="color:white;">Failed to load items.</p>';
+    }
+  }
+
+  loadItems();
+</script>
+</body>
+</html>
+
