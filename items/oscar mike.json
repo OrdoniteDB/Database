@@ -1,11 +1,11 @@
 {
   "serial": "@Ugfs(8FnkbUYF<!k)Swa-sWGTaO{xxR4=NQZ7OEEN7HS>pCIS",
-  "decoded id": "{100} {1} {4} {8} {17} {11} {9} {26} {29} {36} {40} {42} {43} {53} {75}|"
+  "decoded id": "{100} {1} {4} {8} {17} {11} {9} {26} {29} {36} {40} {42} {43} {53} {75}|",
   "name": "oscar mike",
   "type": "assault riffle",
   "rarity": 5,
   "manufacturer": "daedalus",
-  "level": 60,
-  "underbarrel": "space laser"
+  "level": 60,,
+  "underbarrel": "space laser",
   "uploader": "owner"
 }
