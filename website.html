@@ -265,6 +265,38 @@
       gap: 1.5rem;
       align-items: start;
     }
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+    }
+    .list-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0.1rem;
+    }
+    .list-controls-left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .list-controls-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-lo);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .list-controls-right {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .ctrl-wrap {
+      position: relative;
+    }
 
     /* ── LEFT PANEL ── */
     .list-panel {
@@ -273,18 +305,114 @@
       border: 1px solid var(--border);
       border-radius: 4px;
       overflow: hidden;
-      max-height: 72vh;
+      max-height: 66vh;
       display: flex;
       flex-direction: column;
     }
-    .list-panel-header {
-      padding: 0.8rem 1rem;
-      border-bottom: 1px solid var(--border);
+    .sort-btn {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 0.35rem;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      padding: 0.25rem 0.6rem;
+      background: rgba(160,80,255,0.08);
+      border: 1px solid var(--border-hi);
+      border-radius: 2px;
+      color: var(--accent);
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
     }
-    .list-panel-header span {
+    .sort-btn:hover { background: rgba(160,80,255,0.18); border-color: var(--accent); }
+    .sort-btn.open  { background: rgba(160,80,255,0.22); border-color: var(--accent); }
+    .sort-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      z-index: 9999;
+      background: #0e0826;
+      border: 1px solid var(--border-hi);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+      min-width: 210px;
+    }
+    .sort-dropdown.open { display: block; }
+
+    /* Filter panel extras */
+    .filter-section { padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border); }
+    .filter-section:last-of-type { border-bottom: none; }
+    .filter-section-title {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-lo);
+      margin-bottom: 0.5rem;
+    }
+    .filter-chip {
+      display: inline-block;
+      margin: 0.2rem 0.2rem 0.2rem 0;
+      padding: 0.25rem 0.65rem;
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      background: transparent;
+      border: 1px solid var(--border-hi);
+      border-radius: 2px;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .filter-chip:hover { background: rgba(160,80,255,0.12); color: var(--text-hi); }
+    .filter-chip.active { background: rgba(160,80,255,0.2); border-color: var(--accent); color: var(--accent); }
+    .filter-clear-btn {
+      display: block;
+      width: 100%;
+      padding: 0.6rem 0.9rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      background: transparent;
+      border: none;
+      border-top: 1px solid var(--border);
+      color: var(--text-lo);
+      cursor: pointer;
+      text-align: left;
+      letter-spacing: 0.05em;
+      transition: color 0.12s;
+    }
+    .filter-clear-btn:hover { color: #f87171; }
+    .filter-badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.55rem;
+      font-family: var(--mono);
+      padding: 0.05rem 0.35rem;
+      border-radius: 10px;
+      margin-left: 0.1rem;
+    }
+    .sort-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-mid);
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: background 0.12s, color 0.12s;
+    }
+    .sort-option:last-child { border-bottom: none; }
+    .sort-option:hover { background: rgba(160,80,255,0.12); color: var(--text-hi); }
+    .sort-option.active { color: var(--accent); background: rgba(160,80,255,0.1); }
+
+    
       font-family: var(--mono);
       font-size: 0.68rem;
       color: var(--text-lo);
@@ -482,6 +610,62 @@
     .dot-4 { background: #d8b4fe; }
     .dot-5 { background: #ffd966; }
 
+    /* ── Variant cards ── */
+    .variants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      padding: 0.5rem 2rem 1.8rem;
+    }
+    .variant-card {
+      background: rgba(160, 80, 255, 0.05);
+      border: 1px solid var(--border-hi);
+      border-radius: 4px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .variant-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .variant-num {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--text-lo);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 0.1rem 0.4rem;
+    }
+    .variant-underbarrel {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .variant-mag {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--gold);
+      background: rgba(255,180,50,0.07);
+      border: 1px solid rgba(255,180,50,0.25);
+      border-radius: 2px;
+      padding: 0.1rem 0.45rem;
+    }
+    .variant-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
     /* scrollbars */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -570,15 +754,51 @@
   <div class="database-grid">
 
     <!-- LEFT: item list -->
-    <div class="list-panel">
-      <div class="list-panel-header">
-        <span>Items</span>
-        <span class="item-count" id="itemCount">—</span>
+    <div class="left-col">
+      <!-- Controls row (outside panel so dropdowns aren't clipped) -->
+      <div class="list-controls">
+        <div class="list-controls-left">
+          <span class="list-controls-label">Items</span>
+          <span class="item-count" id="itemCount">—</span>
+        </div>
+        <div class="list-controls-right">
+          <div class="ctrl-wrap">
+            <button class="sort-btn" id="filterBtn" title="Filter">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              Filter
+              <span class="filter-badge" id="filterBadge" style="display:none">0</span>
+            </button>
+            <!-- Filter panel -->
+            <div class="sort-dropdown" id="filterPanel" style="min-width:240px;"></div>
+          </div>
+          <div class="ctrl-wrap">
+            <button class="sort-btn" id="sortBtn" title="Sort">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+              <span id="sortLabel">Name A–Z</span>
+            </button>
+            <!-- Sort dropdown -->
+            <div class="sort-dropdown" id="sortDropdown">
+              <button class="sort-option active" data-sort="name-asc">Name A–Z</button>
+              <button class="sort-option" data-sort="name-desc">Name Z–A</button>
+              <button class="sort-option" data-sort="rarity-desc">Rarity ↑ (Legendary first)</button>
+              <button class="sort-option" data-sort="rarity-asc">Rarity ↓ (Common first)</button>
+              <button class="sort-option" data-sort="type-asc">Type A–Z</button>
+              <button class="sort-option" data-sort="manufacturer-asc">Manufacturer A–Z</button>
+              <button class="sort-option" data-sort="level-desc">Level ↓ (Highest first)</button>
+              <button class="sort-option" data-sort="level-asc">Level ↑ (Lowest first)</button>
+              <button class="sort-option" data-sort="variants-desc">Most Variants</button>
+              <button class="sort-option" data-sort="uploader-asc">Uploader A–Z</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="list-scroll" id="itemList">
-        <div style="padding:1.5rem; text-align:center; font-family:var(--mono); font-size:0.75rem; color:var(--text-lo);">Loading items…</div>
+
+      <div class="list-panel">
+        <div class="list-scroll" id="itemList">
+          <div style="padding:1.5rem; text-align:center; font-family:var(--mono); font-size:0.75rem; color:var(--text-lo);">Loading items…</div>
+        </div>
       </div>
-    </div>
+    </div><!-- /left-col -->
 
     <!-- RIGHT: detail -->
     <div class="detail-panel" id="itemDetail">
@@ -592,15 +812,15 @@
 </div>
 
 <script>
-  // ========== CONFIGURATION ==========
   const GITHUB_USER  = "OrdoniteDB";
   const GITHUB_REPO  = "Database";
   const ITEMS_FOLDER = "items";
-  // ====================================
 
-  let allItems = [];
-  let filteredItems = [];
-  let currentIdx = null;
+  let allGroups     = [];
+  let filteredGroups = [];
+  let currentGroupIdx = null;
+  let currentSort   = 'name-asc';
+  let activeFilters = { rarity: new Set(), type: new Set(), manufacturer: new Set() };
 
   const RARITY = {
     1: { name: "Common",    cls: "r1", dot: "dot-1" },
@@ -610,29 +830,64 @@
     5: { name: "Legendary", cls: "r5", dot: "dot-5" }
   };
 
-  function cap(str) {
-    if (!str) return "—";
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+  function cap(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : "—"; }
   function esc(str) {
     return String(str ?? "").replace(/[&<>"']/g, m =>
       ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
   }
 
-  function repairJSON(text) {
-    let s = text.trim();
-    s = s.replace(/"\s*:\s*("[^"]*"|\d+|true|false|null)\s+"/g, (m,p1) => `" : ${p1}, "`);
-    s = s.replace(/([{,]\s*)([a-zA-Z0-9_-]+)(\s*:)/g, '$1"$2"$3');
-    s = s.replace(/:\s*([a-zA-Z0-9_\-\/]+)(\s*[,}])/g, ':"$1"$2');
+  /* ── JSON parsing ── */
+  function repairChunk(raw) {
+    let s = raw;
+    // Only quote property keys that are NOT already quoted
+    // Match: start of object or comma, optional whitespace, unquoted word(s), colon
+    s = s.replace(/([{,]\s*)([A-Za-z][A-Za-z0-9 _-]*)(\s*:(?!\s*[:/]))/g, (m, pre, key, post) => {
+      // Skip if already inside quotes (the regex won't reach here for quoted keys)
+      return `${pre}"${key.trim()}"${post}`;
+    });
+    // Remove trailing commas before } or ]
     s = s.replace(/,(\s*[}\]])/g, '$1');
     return s;
   }
 
-  async function fetchJSON(url) {
-    const res = await fetch(url);
+  function tryParse(chunk) {
+    try { return JSON.parse(chunk); } catch (_) {}
+    try { return JSON.parse(repairChunk(chunk)); } catch (_) {}
+    return null;
+  }
+
+  function parseMultiJSON(text) {
+    const results = [];
+    let depth = 0, start = -1, inStr = false, esc_ = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (esc_)          { esc_ = false; continue; }
+      if (ch === '\\' && inStr) { esc_ = true; continue; }
+      if (ch === '"')    { inStr = !inStr; continue; }
+      if (inStr)         continue;
+      if (ch === '{')    { if (depth++ === 0) start = i; }
+      else if (ch === '}') {
+        if (--depth === 0 && start !== -1) {
+          const chunk = text.slice(start, i + 1);
+          const parsed = tryParse(chunk);
+          if (parsed) results.push(parsed);
+          else console.warn('Could not parse chunk:', chunk.slice(0, 100));
+          start = -1;
+        }
+      }
+    }
+    return results;
+  }
+
+  async function fetchItems(url) {
+    const res  = await fetch(url);
     const text = await res.text();
-    try { return JSON.parse(text); }
-    catch (e) { return JSON.parse(repairJSON(text)); }
+    const multi = parseMultiJSON(text);
+    if (multi.length) return multi;
+    try {
+      const p = JSON.parse(text);
+      return Array.isArray(p) ? p : [p];
+    } catch (_) { return []; }
   }
 
   async function getFiles() {
@@ -640,137 +895,356 @@
     const res = await fetch(url);
     if (!res.ok) throw new Error(`GitHub API ${res.status}`);
     const files = await res.json();
-    return files.filter(f => f.name.endsWith('.json')).map(f => f.download_url);
+    return files
+      .filter(f => f.name.endsWith('.json') && f.name.toLowerCase() !== 'example.json')
+      .map(f => f.download_url);
   }
 
   async function loadAll() {
-    const urls = await getFiles();
+    const urls  = await getFiles();
     const items = [];
-    for (const url of urls) {
-      try {
-        const data = await fetchJSON(url);
-        if (Array.isArray(data)) items.push(...data);
-        else items.push(data);
-      } catch (err) { console.error("Skip", url, err); }
-    }
+    await Promise.all(urls.map(async url => {
+      try { items.push(...await fetchItems(url)); }
+      catch (err) { console.warn("Could not load", url, err.message); }
+    }));
     return items;
   }
 
-  function renderList(items) {
-    const container = document.getElementById('itemList');
-    document.getElementById('itemCount').textContent = items.length;
+  function groupItems(items) {
+    const map = new Map();
+    for (const item of items) {
+      const key = `${(item.name||'').toLowerCase()}__${(item.type||'').toLowerCase()}__${(item.manufacturer||'').toLowerCase()}`;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(item);
+    }
+    return [...map.values()];
+  }
 
-    if (!items.length) {
+  /* ── Sort ── */
+  const SORT_LABELS = {
+    'name-asc':         'Name A–Z',
+    'name-desc':        'Name Z–A',
+    'rarity-desc':      'Rarity ↑',
+    'rarity-asc':       'Rarity ↓',
+    'type-asc':         'Type A–Z',
+    'manufacturer-asc': 'Manufacturer',
+    'level-desc':       'Level ↓',
+    'level-asc':        'Level ↑',
+    'variants-desc':    'Most Variants',
+    'uploader-asc':     'Uploader A–Z',
+  };
+
+  function sortGroups(groups) {
+    const s = [...groups];
+    switch (currentSort) {
+      case 'name-asc':         s.sort((a,b) => (a[0].name||'').localeCompare(b[0].name||'')); break;
+      case 'name-desc':        s.sort((a,b) => (b[0].name||'').localeCompare(a[0].name||'')); break;
+      case 'rarity-desc':      s.sort((a,b) => (b[0].rarity||0)-(a[0].rarity||0)); break;
+      case 'rarity-asc':       s.sort((a,b) => (a[0].rarity||0)-(b[0].rarity||0)); break;
+      case 'type-asc':         s.sort((a,b) => (a[0].type||'').localeCompare(b[0].type||'')); break;
+      case 'manufacturer-asc': s.sort((a,b) => (a[0].manufacturer||'').localeCompare(b[0].manufacturer||'')); break;
+      case 'level-desc':       s.sort((a,b) => (b[0].level||0)-(a[0].level||0)); break;
+      case 'level-asc':        s.sort((a,b) => (a[0].level||0)-(b[0].level||0)); break;
+      case 'variants-desc':    s.sort((a,b) => b.length-a.length); break;
+      case 'uploader-asc':     s.sort((a,b) => (a[0].uploader||'').localeCompare(b[0].uploader||'')); break;
+    }
+    return s;
+  }
+
+  /* ── Filter chip state ── */
+  function applyFiltersAndSort(searchTerm) {
+    const t = (searchTerm || document.getElementById('searchInput').value).toLowerCase().trim();
+    let base = allGroups.filter(group => {
+      // text search
+      const textOk = !t || group.some(item =>
+        [item.name, item.manufacturer, item.type, item.underbarrel, item.serial, item.magazine, item.uploader]
+          .some(v => v && String(v).toLowerCase().includes(t))
+      );
+      // rarity filter
+      const rarOk = activeFilters.rarity.size === 0 || group.some(item => activeFilters.rarity.has(String(item.rarity)));
+      // type filter
+      const typeOk = activeFilters.type.size === 0 || group.some(item => activeFilters.type.has((item.type||'').toLowerCase()));
+      // manufacturer filter
+      const mfrOk = activeFilters.manufacturer.size === 0 || group.some(item => activeFilters.manufacturer.has((item.manufacturer||'').toLowerCase()));
+      return textOk && rarOk && typeOk && mfrOk;
+    });
+    filteredGroups = sortGroups(base);
+    currentGroupIdx = null;
+    renderList(filteredGroups);
+  }
+
+  /* ── Filter panel builder ── */
+  function buildFilterPanel() {
+    // Collect unique values
+    const types = new Set(), mfrs = new Set(), rarities = new Set();
+    allGroups.forEach(g => g.forEach(item => {
+      if (item.type)         types.add(item.type.toLowerCase());
+      if (item.manufacturer) mfrs.add(item.manufacturer.toLowerCase());
+      if (item.rarity)       rarities.add(String(item.rarity));
+    }));
+
+    const panel = document.getElementById('filterPanel');
+    panel.innerHTML = '';
+
+    function makeSection(title, values, filterKey, labelFn) {
+      const section = document.createElement('div');
+      section.className = 'filter-section';
+      section.innerHTML = `<div class="filter-section-title">${title}</div>`;
+      [...values].sort().forEach(v => {
+        const chip = document.createElement('button');
+        chip.className = 'filter-chip' + (activeFilters[filterKey].has(v) ? ' active' : '');
+        chip.textContent = labelFn ? labelFn(v) : cap(v);
+        chip.onclick = () => {
+          if (activeFilters[filterKey].has(v)) activeFilters[filterKey].delete(v);
+          else activeFilters[filterKey].add(v);
+          chip.classList.toggle('active');
+          updateActiveFilterCount();
+          applyFiltersAndSort('');
+        };
+        section.appendChild(chip);
+      });
+      panel.appendChild(section);
+    }
+
+    makeSection('Rarity', rarities, 'rarity', v => RARITY[v]?.name || v);
+    makeSection('Type', types, 'type', null);
+    makeSection('Manufacturer', mfrs, 'manufacturer', null);
+
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'filter-clear-btn';
+    clearBtn.textContent = 'Clear all filters';
+    clearBtn.onclick = () => {
+      activeFilters = { rarity: new Set(), type: new Set(), manufacturer: new Set() };
+      panel.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      updateActiveFilterCount();
+      applyFiltersAndSort('');
+    };
+    panel.appendChild(clearBtn);
+  }
+
+  function updateActiveFilterCount() {
+    const total = activeFilters.rarity.size + activeFilters.type.size + activeFilters.manufacturer.size;
+    const badge = document.getElementById('filterBadge');
+    if (total > 0) {
+      badge.textContent = total;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  /* ── Sort UI ── */
+  function initSortUI() {
+    const sortBtn      = document.getElementById('sortBtn');
+    const sortDropdown = document.getElementById('sortDropdown');
+    const sortLabel    = document.getElementById('sortLabel');
+    const filterBtn    = document.getElementById('filterBtn');
+    const filterPanel  = document.getElementById('filterPanel');
+
+    sortBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      sortDropdown.classList.toggle('open');
+      sortBtn.classList.toggle('open');
+      filterPanel.classList.remove('open');
+      filterBtn.classList.remove('open');
+    });
+
+    filterBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      filterPanel.classList.toggle('open');
+      filterBtn.classList.toggle('open');
+      sortDropdown.classList.remove('open');
+      sortBtn.classList.remove('open');
+    });
+
+    document.addEventListener('click', () => {
+      sortDropdown.classList.remove('open');
+      sortBtn.classList.remove('open');
+      filterPanel.classList.remove('open');
+      filterBtn.classList.remove('open');
+    });
+
+    sortDropdown.addEventListener('click', e => e.stopPropagation());
+    filterPanel.addEventListener('click', e => e.stopPropagation());
+
+    sortDropdown.querySelectorAll('.sort-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        currentSort = opt.dataset.sort;
+        sortLabel.textContent = SORT_LABELS[currentSort];
+        sortDropdown.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        sortDropdown.classList.remove('open');
+        sortBtn.classList.remove('open');
+        applyFiltersAndSort('');
+      });
+    });
+  }
+
+  /* ── Render list ── */
+  function renderList(groups) {
+    const container = document.getElementById('itemList');
+    document.getElementById('itemCount').textContent = groups.length;
+    if (!groups.length) {
       container.innerHTML = `<div style="padding:1.5rem;text-align:center;font-family:var(--mono);font-size:0.75rem;color:var(--text-lo);">No items found.</div>`;
       return;
     }
     container.innerHTML = '';
-    items.forEach(item => {
-      const gIdx = allItems.indexOf(item);
-      const r = RARITY[item.rarity] || RARITY[1];
+    groups.forEach((group, gIdx) => {
+      const rep = group[0];
+      const r   = RARITY[rep.rarity] || RARITY[1];
       const btn = document.createElement('button');
-      btn.className = 'item-btn' + (currentIdx === gIdx ? ' active' : '');
+      btn.className = 'item-btn' + (currentGroupIdx === gIdx ? ' active' : '');
       btn.id = `btn-${gIdx}`;
+      const variantLabel = group.length > 1
+        ? ` <span style="font-size:0.6rem;opacity:0.6;">(${group.length})</span>` : '';
       btn.innerHTML = `
         <span class="item-btn-name">
-          <span class="rarity-dot ${r.dot}"></span>${esc(item.name || 'Unnamed')}
+          <span class="rarity-dot ${r.dot}"></span>${esc(rep.name || 'Unnamed')}${variantLabel}
         </span>
-        <span class="item-btn-meta">${cap(item.manufacturer)} · ${cap(item.type)} · Lv${item.level ?? '?'}</span>
+        <span class="item-btn-meta">${cap(rep.manufacturer)} · ${cap(rep.type)}${group.length === 1 && rep.underbarrel ? ' · ' + cap(rep.underbarrel) : ''}</span>
       `;
-      btn.onclick = () => selectItem(gIdx);
+      btn.onclick = () => selectGroup(gIdx);
       container.appendChild(btn);
     });
   }
 
-  function selectItem(idx) {
-    const item = allItems[idx];
-    if (!item) return;
-    currentIdx = idx;
-    window.location.hash = idx;
+  /* ── Select group ── */
+  function selectGroup(gIdx) {
+    const group = filteredGroups[gIdx];
+    if (!group) return;
+    currentGroupIdx = gIdx;
+    window.location.hash = allGroups.indexOf(group);
 
-    const r = RARITY[item.rarity] || RARITY[1];
-    const decoded = item['decoded-id'] || item['decoded id'] || '—';
+    const rep    = group[0];
+    const r      = RARITY[rep.rarity] || RARITY[1];
     const detail = document.getElementById('itemDetail');
+
+    let variantsHTML = '';
+    if (group.length === 1) {
+      const item    = group[0];
+      const decoded = item['decoded-id'] || item['decoded id'] || '—';
+      variantsHTML = `
+        <div class="detail-body">
+          <div class="detail-section">
+            <div class="section-label">Manufacturer</div>
+            <div class="section-value accent">${cap(item.manufacturer)}</div>
+          </div>
+          <div class="detail-section">
+            <div class="section-label">Type</div>
+            <div class="section-value">${cap(item.type)}</div>
+          </div>
+          <div class="detail-section">
+            <div class="section-label">Level</div>
+            <div class="section-value">${esc(item.level ?? '—')}</div>
+          </div>
+          <div class="detail-section">
+            <div class="section-label">Underbarrel</div>
+            <div class="section-value">${cap(item.underbarrel || 'None')}</div>
+          </div>
+          ${item.magazine ? `<div class="detail-section"><div class="section-label">Magazine</div><div class="section-value">${cap(item.magazine)}</div></div>` : ''}
+          <div class="detail-section" style="${item.magazine ? '' : 'grid-column:1/-1'}">
+            <div class="section-label">Uploader</div>
+            <div class="section-value">${esc(item.uploader || 'unknown')}</div>
+          </div>
+          <div class="detail-full">
+            <div class="section-label">Serial</div>
+            <div class="section-value mono">${esc(item.serial || '—')}</div>
+          </div>
+          <div class="detail-full">
+            <div class="section-label">Decoded ID</div>
+            <div class="section-value mono">${esc(decoded)}</div>
+          </div>
+        </div>
+      `;
+    } else {
+      // Multiple variants — show shared stats once, then a card per variant
+      variantsHTML = `
+        <div class="detail-body">
+          <div class="detail-section">
+            <div class="section-label">Manufacturer</div>
+            <div class="section-value accent">${cap(rep.manufacturer)}</div>
+          </div>
+          <div class="detail-section">
+            <div class="section-label">Type</div>
+            <div class="section-value">${cap(rep.type)}</div>
+          </div>
+          <div class="detail-section">
+            <div class="section-label">Level</div>
+            <div class="section-value">${esc(rep.level ?? '—')}</div>
+          </div>
+          <div class="detail-section">
+            <div class="section-label">Uploader</div>
+            <div class="section-value">${esc(rep.uploader || 'unknown')}</div>
+          </div>
+        </div>
+        <div class="variants-label">
+          <span class="section-label" style="padding:1rem 2rem 0.4rem;display:block;">VARIANTS · ${group.length}</span>
+        </div>
+        <div class="variants-grid">
+          ${group.map((item, vi) => {
+            const decoded = item['decoded-id'] || item['decoded id'] || '—';
+            return `
+              <div class="variant-card">
+                <div class="variant-header">
+                  <span class="variant-num">#${vi + 1}</span>
+                  <span class="variant-underbarrel">${cap(item.underbarrel || 'No underbarrel')}</span>
+                  ${item.magazine ? `<span class="variant-mag">${cap(item.magazine)}</span>` : ''}
+                </div>
+                <div class="variant-row">
+                  <span class="section-label">Serial</span>
+                  <span class="section-value mono" style="font-size:0.68rem;">${esc(item.serial || '—')}</span>
+                </div>
+                <div class="variant-row">
+                  <span class="section-label">Decoded ID</span>
+                  <span class="section-value mono" style="font-size:0.68rem;">${esc(decoded)}</span>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
 
     detail.innerHTML = `
       <div class="detail-header">
         <div>
-          <div class="detail-name">${esc(item.name || 'Unknown')}</div>
-          <div class="detail-subtitle">${cap(item.manufacturer)} · ${cap(item.type)}</div>
+          <div class="detail-name">${esc(rep.name || 'Unknown')}</div>
+          <div class="detail-subtitle">${cap(rep.manufacturer)} · ${cap(rep.type)}${group.length > 1 ? ` · <span style="color:var(--accent)">${group.length} variants</span>` : ''}</div>
         </div>
         <span class="rarity-tag ${r.cls}">${r.name}</span>
       </div>
-      <div class="detail-body">
-        <div class="detail-section">
-          <div class="section-label">Manufacturer</div>
-          <div class="section-value accent">${cap(item.manufacturer)}</div>
-        </div>
-        <div class="detail-section">
-          <div class="section-label">Type</div>
-          <div class="section-value">${cap(item.type)}</div>
-        </div>
-        <div class="detail-section">
-          <div class="section-label">Level</div>
-          <div class="section-value">${esc(item.level ?? '—')}</div>
-        </div>
-        <div class="detail-section">
-          <div class="section-label">Underbarrel</div>
-          <div class="section-value">${cap(item.underbarrel || 'None')}</div>
-        </div>
-        ${item.magazine ? `
-        <div class="detail-section">
-          <div class="section-label">Magazine</div>
-          <div class="section-value">${cap(item.magazine)}</div>
-        </div>
-        <div class="detail-section">
-          <div class="section-label">Uploader</div>
-          <div class="section-value">${esc(item.uploader || 'unknown')}</div>
-        </div>` : `
-        <div class="detail-section" style="grid-column:1/-1">
-          <div class="section-label">Uploader</div>
-          <div class="section-value">${esc(item.uploader || 'unknown')}</div>
-        </div>`}
-        <div class="detail-full">
-          <div class="section-label">Serial</div>
-          <div class="section-value mono">${esc(item.serial || '—')}</div>
-        </div>
-        <div class="detail-full">
-          <div class="section-label">Decoded ID</div>
-          <div class="section-value mono">${esc(decoded)}</div>
-        </div>
-      </div>
+      ${variantsHTML}
     `;
 
     document.querySelectorAll('.item-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`btn-${idx}`)?.classList.add('active');
-  }
-
-  function filter(term) {
-    const t = term.toLowerCase().trim();
-    filteredItems = t ? allItems.filter(item =>
-      [item.name, item.manufacturer, item.type, item.underbarrel, item.serial]
-        .some(v => v && v.toLowerCase().includes(t))
-    ) : [...allItems];
-    renderList(filteredItems);
+    document.getElementById(`btn-${gIdx}`)?.classList.add('active');
   }
 
   async function init() {
     const listContainer = document.getElementById('itemList');
     try {
-      allItems = await loadAll();
-      if (!allItems.length) {
+      const items = await loadAll();
+      allGroups = groupItems(items);
+      if (!allGroups.length) {
         listContainer.innerHTML = `<div style="padding:1.5rem;font-family:var(--mono);font-size:0.75rem;color:var(--text-lo);">⚠ No items in /items/ — add some .json files.</div>`;
         document.getElementById('itemCount').textContent = '0';
         return;
       }
-      filteredItems = [...allItems];
-      renderList(filteredItems);
+      buildFilterPanel();
+      filteredGroups = sortGroups([...allGroups]);
+      renderList(filteredGroups);
+      initSortUI();
 
       const hash = window.location.hash.slice(1);
-      const startIdx = hash && /^\d+$/.test(hash) ? parseInt(hash) : 0;
-      if (startIdx >= 0 && startIdx < allItems.length) selectItem(startIdx);
+      if (hash && /^\d+$/.test(hash)) {
+        const globalIdx = parseInt(hash);
+        const filtIdx   = filteredGroups.indexOf(allGroups[globalIdx]);
+        selectGroup(filtIdx >= 0 ? filtIdx : 0);
+      } else {
+        selectGroup(0);
+      }
 
-      document.getElementById('searchInput').addEventListener('input', e => filter(e.target.value));
+      document.getElementById('searchInput').addEventListener('input', e => applyFiltersAndSort(e.target.value));
     } catch (err) {
       console.error(err);
       listContainer.innerHTML = `<div style="padding:1.5rem;font-family:var(--mono);font-size:0.75rem;color:#f87171;">Failed: ${esc(err.message)}</div>`;
